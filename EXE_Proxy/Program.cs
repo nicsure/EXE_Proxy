@@ -36,7 +36,7 @@ static void Go(string exe, string[] args)
         Log(process.StandardError,  " ERROR: ", log);
     }
     try { process.WaitForExit(); } catch { } // wait for process to end (if it even started)
-    WriteLogFile(exe + "_log.txt", log); // rite out the log file
+    WriteLogFile(exe + "_log.txt", log); // write out the log file
 }
 
 static void WriteLogFile(string fileName, string[] log)
@@ -53,7 +53,7 @@ static async void Log(StreamReader stream, string prefix, string[] log)
 {
     try
     {
-        while (true) // loop forever(ish)
+        while (!stream.EndOfStream) // loop forever(ish)
         {
             string? line = await stream.ReadLineAsync(); // wait for the next line and release execution back to the Go() method
             if (line == null) break; // end the loop if there's an error
