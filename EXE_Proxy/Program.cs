@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿// By -nicsure- 2022
+
+using System.Diagnostics;
 
 const char q = '"';
 
@@ -24,16 +26,13 @@ static void Go(string exe, string[] args)
     try
     {
         process.Start(); // start the process
+        Log(process.StandardOutput, "OUTPUT: ", log); // start asynchronous tasks to capture console output
+        Log(process.StandardError, " ERROR: ", log);
     }
     catch (Exception e) // catch any errors (yes I know, sue me)
     {
         lock(log)
             log[0] += "An error occured when trying to start the original exe \r\n\r\n" + e.ToString(); // add the error report to the log
-    }
-    if (!process.HasExited) // if the process is running
-    {
-        Log(process.StandardOutput, "OUTPUT: ", log); // start asynchronous tasks to capture console output
-        Log(process.StandardError,  " ERROR: ", log);
     }
     try { process.WaitForExit(); } catch { } // wait for process to end (if it even started)
     WriteLogFile(exe + "_log.txt", log); // write out the log file
